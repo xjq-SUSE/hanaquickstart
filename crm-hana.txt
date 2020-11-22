@@ -1,0 +1,48 @@
+property $id="cib-bootstrap-options" \
+ stonith-enabled="true" \
+ stonith-action="poweroff" \
+ stonith-timeout="150s"
+rsc_defaults $id="rsc-options" \
+ resource-stickiness="1000" \
+ migration-threshold="5000"
+op_defaults $id="op-options" \
+ timeout="600"
+
+primitive res_AWS_STONITH stonith:external/ec2 \
+ op start interval=0 timeout=180 \
+ op stop interval=0 timeout=180 \
+ op monitor interval=120 timeout=60 \
+ meta target-role=Started \
+ params tag=pacemaker profile=cluster
+
+primitive res_AWS_IP ocf:suse:aws-vpc-move-ip \
+ params ip=10.1.0.101 routing_table=rtb-table interface=eth0 profile=cluster \
+ op start interval=0 timeout=180 \
+ op stop interval=0 timeout=180 \
+ op monitor interval=60 timeout=60
+
+primitive rsc_SAPHanaTopology_SP1_HDB10 ocf:suse:SAPHanaTopology \
+ operations $id="rsc_sap2_SP1_HDB10-operations" \
+ op monitor interval="10" timeout="600" \
+ op start interval="0" timeout="600" \
+ op stop interval="0" timeout="300" \
+ params SID="HA1" InstanceNumber="10"
+clone cln_SAPHanaTopology_SP1_HDB10 rsc_SAPHanaTopology_SP1_HDB10 \
+ meta clone-node-max="1" interleave="true"
+
+primitive rsc_SAPHana_SP1_HDB10 ocf:suse:SAPHana \
+ operations $id="rsc_sap_SP1_HDB10-operations" \
+ op start interval="0" timeout="3600" \
+ op stop interval="0" timeout="3600" \
+ op promote interval="0" timeout="3600" \
+ op monitor interval="60" role="Master" timeout="700" \
+ op monitor interval="61" role="Slave" timeout="700" \
+ params SID="SP1" InstanceNumber="10" PREFER_SITE_TAKEOVER="true" \
+ DUPLICATE_PRIMARY_TIMEOUT="7200" AUTOMATED_REGISTER="false"
+ms msl_SAPHana_SP1_HDB10 rsc_SAPHana_SP1_HDB10 \
+ meta clone-max="2" clone-node-max="1" interleave="true"
+
+colocation col_saphana_ip_SP1_HDB10 2000: res_AWS_IP:Started \
+ msl_SAPHana_SP1_HDB10:Master
+order ord_SAPHana_SP1_HDB10 Optional: cln_SAPHanaTopology_SP1_HDB10 \
+ msl_SAPHana_SP1_HDB10

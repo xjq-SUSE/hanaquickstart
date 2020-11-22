@@ -1,0 +1,43 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+    {
+        "Sid": "Stmt1424870324000",
+        "Effect": "Allow",
+        "Action": [
+        "ec2:DescribeInstances",
+        "ec2:DescribeInstanceAttribute",
+        "ec2:DescribeTags"
+        ],
+        "Resource": "*"
+    },
+    {
+        "Sid": "Stmt1424870324001",
+        "Effect": "Allow",
+        "Action": [
+        "ec2:ModifyInstanceAttribute",
+        "ec2:RebootInstances",
+        "ec2:StartInstances",
+        "ec2:StopInstances"
+        ],
+        "Resource": [
+        "arn:aws:ec2:region-name:account-id:instance/instance-a",
+        "arn:aws:ec2:region-name:account-id:instance/instance-b"
+        ]
+    },
+    {
+        "Sid": "VisualEditor0",
+        "Effect": "Allow",
+        "Action": "ec2:ReplaceRoute",
+        "Resource": "arn:aws:ec2:region-name:account-id:route-table/rtb-XYZ"
+        },
+        {
+        "Sid": "VisualEditor1",
+        "Effect": "Allow",
+        "Action": "ec2:DescribeRouteTables",
+        "Resource": "*"
+        }
+        
+    ]
+   }
+   

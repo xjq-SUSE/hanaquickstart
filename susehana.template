@@ -1,0 +1,425 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        },
+        "clustername": {
+            "Description": "Your global unique cluster name",
+            "Type": "String",
+            "ConstraintDescription": "must be global unique."
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "599416ad-a04e-4710-ba7c-7d4f9ae005ef": {
+                "size": {
+                    "width": 150,
+                    "height": 150
+                },
+                "position": {
+                    "x": 360,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "04a449fa-dc63-485c-a0a7-ce9ab45d02cb": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 260,
+                    "y": 10
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                ]
+            },
+            "67bee9e5-1e07-4409-976d-51cca23195ff": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 100,
+                    "y": 100
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                ]
+            },
+            "2dca5df9-cd92-4d13-a567-e75c2df2163d": {
+                "source": {
+                    "id": "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                },
+                "target": {
+                    "id": "67bee9e5-1e07-4409-976d-51cca23195ff"
+                },
+                "z": 1
+            },
+            "3f025bd7-65c7-48fa-afe3-e706493c3f72": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": 640,
+                    "y": 30
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                ]
+            },
+            "679ef439-4d35-4c29-b8c4-8b41356c9515": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": 640,
+                    "y": 210
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                ]
+            },
+            "e28f2c40-7b1d-4766-8d43-13572cdd4bef": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": 200,
+                    "y": 220
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                ]
+            },
+            "df653b24-11e8-46d1-a7dd-f7b6b158683c": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 100,
+                    "y": 250
+                },
+                "z": 0,
+                "embeds": [],
+                "isassociatedwith": [
+                    "67bee9e5-1e07-4409-976d-51cca23195ff"
+                ],
+                "iscontainedinside": [
+                    "e28f2c40-7b1d-4766-8d43-13572cdd4bef"
+                ]
+            },
+            "07c2bf59-862d-4665-8da7-defd6f313f0c": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 900,
+                    "y": 30
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "3f025bd7-65c7-48fa-afe3-e706493c3f72",
+                    "679ef439-4d35-4c29-b8c4-8b41356c9515"
+                ]
+            },
+            "670b4c95-1a54-473d-bff7-d7cceb9374fd": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 940,
+                    "y": 140
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "3f025bd7-65c7-48fa-afe3-e706493c3f72",
+                    "679ef439-4d35-4c29-b8c4-8b41356c9515"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "test2020hanavpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "599416ad-a04e-4710-ba7c-7d4f9ae005ef"
+                }
+            }
+        },
+        "test2020hanasg": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable HTTP access via port 80 locked down to the load balancer + SSH access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "test2020hanavpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "04a449fa-dc63-485c-a0a7-ce9ab45d02cb"
+                }
+            },
+            "DependsOn": [
+                "test2020hanavpc"
+            ]
+        },
+        "test2020hanagateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "67bee9e5-1e07-4409-976d-51cca23195ff"
+                }
+            }
+        },
+        "EC2VPCG1YIJG": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "test2020hanagateway"
+                },
+                "VpcId": {
+                    "Ref": "test2020hanavpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "2dca5df9-cd92-4d13-a567-e75c2df2163d"
+                }
+            }
+        },
+        "test2020hanasubpublic": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/24",
+                "VpcId": {
+                    "Ref": "test2020hanavpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "3f025bd7-65c7-48fa-afe3-e706493c3f72"
+                }
+            },
+            "DependsOn": [
+                "test2020hanavpc"
+            ]
+        },
+        "test2020hanasubinternal": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "CidrBlock": "10.0.1.0/24",
+                "VpcId": {
+                    "Ref": "test2020hanavpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "679ef439-4d35-4c29-b8c4-8b41356c9515"
+                }
+            },
+            "DependsOn": [
+                "test2020hanavpc"
+            ]
+        },
+        "test2020hanaroute": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "test2020hanavpc"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "e28f2c40-7b1d-4766-8d43-13572cdd4bef"
+                }
+            }
+        },
+        "test2020routedefault": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": {
+                    "Ref": "test2020hanaroute"
+                },
+                "GatewayId": {
+                    "Ref": "test2020hanagateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "df653b24-11e8-46d1-a7dd-f7b6b158683c"
+                }
+            }
+        },
+        "node1": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": "ami-05ed92c72854277f4",
+                "InstanceType": "r5.xlarge",
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": 0,
+                        "SubnetId": {
+                            "Ref": "test2020hanasubpublic"
+                        }
+                    },
+                    {
+                        "DeviceIndex": 1,
+                        "SubnetId": {
+                            "Ref": "test2020hanasubinternal"
+                        }
+                    }
+                ],
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sdb",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdc",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdd",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sde",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "pacemaker",
+                        "Value": "node1"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "07c2bf59-862d-4665-8da7-defd6f313f0c"
+                }
+            }
+        },
+        "node2": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": "ami-05ed92c72854277f4",
+                "InstanceType": "r5.xlarge",
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": 0,
+                        "SubnetId": {
+                            "Ref": "test2020hanasubpublic"
+                        }
+                    },
+                    {
+                        "DeviceIndex": 1,
+                        "SubnetId": {
+                            "Ref": "test2020hanasubinternal"
+                        }
+                    }
+                ],
+            
+            "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sdb",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdc",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdd",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sde",
+                        "Ebs": {
+                            "VolumeSize": "32",
+                            "DeleteOnTermination": "false"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "pacemaker",
+                        "Value": "node2"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "670b4c95-1a54-473d-bff7-d7cceb9374fd"
+                }
+            }
+        }
+    }
+}

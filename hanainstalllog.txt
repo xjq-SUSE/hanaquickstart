@@ -1,0 +1,174 @@
+node2:/hana/shared/SAP_HANA_DATABASE_032 # ./hdblcm --ignore=check_signature_file
+
+
+SAP HANA Lifecycle Management - SAP HANA Database 2.00.032.00.1533114046
+************************************************************************
+
+
+Scanning software locations...
+Detected components:
+    SAP HANA Database (2.00.032.00.1533114046) in /hana/shared/SAP_HANA_DATABASE_032/server
+
+
+
+Choose an action
+
+  Index | Action             | Description
+  -----------------------------------------------
+  1     | install            | Install new system
+  2     | extract_components | Extract components
+  3     | Exit (do nothing)  |
+
+Enter selected action index [3]: 1
+
+Enter Installation Path [/hana/shared]:
+Enter Local Host Name [node2]:
+Do you want to add hosts to the system? (y/n) [n]: n
+Enter SAP HANA System ID: SP1
+Enter Instance Number [00]: 10
+Enter Local Host Worker Group [default]:
+
+  Index | System Usage | Description
+  -------------------------------------------------------------------------------
+  1     | production   | System is used in a production environment
+  2     | test         | System is used for testing, not production
+  3     | development  | System is used for development, not production
+  4     | custom       | System usage is neither production, test nor development
+
+Select System Usage / Enter Index [4]: 2
+Enter Location of Data Volumes [/hana/data/SP1]:
+Enter Location of Log Volumes [/hana/log/SP1]:
+Restrict maximum memory allocation? [n]:
+Enter Certificate Host Name For Host 'node2' [node2]:
+Enter SAP Host Agent User (sapadm) Password:
+Confirm SAP Host Agent User (sapadm) Password:
+Enter System Administrator (sp1adm) Password:
+Confirm System Administrator (sp1adm) Password:
+Enter System Administrator Home Directory [/usr/sap/SP1/home]:
+Enter System Administrator Login Shell [/bin/sh]:
+Enter System Administrator User ID [1001]:
+Enter ID of User Group (sapsys) [79]:
+Enter System Database User (SYSTEM) Password:
+System Database User (SYSTEM) Password is invalid
+  System Database User (SYSTEM) Password must contain at least one upper-case character
+
+Enter System Database User (SYSTEM) Password:
+Confirm System Database User (SYSTEM) Password:
+Restart system after machine reboot? [n]: n
+
+Summary before execution:
+=========================
+
+SAP HANA Database System Installation
+   Installation Parameters
+      Remote Execution: ssh
+      Database Isolation: low
+      Installation Path: /hana/shared
+      Local Host Name: node2
+      SAP HANA System ID: SP1
+      Instance Number: 10
+      Local Host Worker Group: default
+      System Usage: test
+      Location of Data Volumes: /hana/data/SP1
+      Location of Log Volumes: /hana/log/SP1
+      Certificate Host Names: node2 -> node2
+      System Administrator Home Directory: /usr/sap/SP1/home
+      System Administrator Login Shell: /bin/sh
+      System Administrator User ID: 1001
+      ID of User Group (sapsys): 79
+   Software Components
+      SAP HANA Database
+         Install version 2.00.032.00.1533114046
+         Location: /hana/shared/SAP_HANA_DATABASE_032/server
+
+Do you want to continue? (y/n): y
+
+Installing components...
+Installing SAP HANA Database...
+  Preparing package 'Saphostagent Setup'...
+  Preparing package 'Python Support'...
+  Preparing package 'Python Runtime'...
+  Preparing package 'Product Manifest'...
+  Preparing package 'Binaries'...
+  Preparing package 'Data Quality'...
+  Preparing package 'Krb5 Runtime'...
+  Preparing package 'Installer'...
+  Preparing package 'Ini Files'...
+  Preparing package 'HWCCT'...
+  Preparing package 'Documentation'...
+  Preparing package 'Delivery Units'...
+  Preparing package 'Offline Cockpit'...
+  Preparing package 'DAT Languages (EN, DE)'...
+  Preparing package 'DAT Languages (other)'...
+  Preparing package 'DAT Configfiles (EN, DE)'...
+  Preparing package 'DAT Configfiles (other)'...
+  Creating System...
+  Extracting software...
+  Installing package 'Saphostagent Setup'...
+  Installing package 'Python Support'...
+  Installing package 'Python Runtime'...
+  Installing package 'Product Manifest'...
+  Installing package 'Binaries'...
+  Installing package 'Data Quality'...
+  Installing package 'Krb5 Runtime'...
+  Installing package 'Installer'...
+  Installing package 'Ini Files'...
+  Installing package 'HWCCT'...
+  Installing package 'Documentation'...
+  Installing package 'Delivery Units'...
+  Installing package 'Offline Cockpit'...
+  Installing package 'DAT Languages (EN, DE)'...
+  Installing package 'DAT Languages (other)'...
+  Installing package 'DAT Configfiles (EN, DE)'...
+  Installing package 'DAT Configfiles (other)'...
+  Creating instance...
+
+  Installing SAP Host Agent version 7.21.33...
+  Starting SAP HANA Database system...
+  Starting 4 processes on host 'node2' (worker):
+      Starting on 'node2' (worker): hdbcompileserver, hdbdaemon, hdbnameserver, hdbpreprocessor
+  Starting 7 processes on host 'node2' (worker):
+      Starting on 'node2' (worker): hdbcompileserver, hdbdaemon, hdbindexserver, hdbnameserver, hdbpreprocessor, hdbwebdispatcher, hdbxsengine
+      Starting on 'node2' (worker): hdbdaemon, hdbindexserver, hdbwebdispatcher, hdbxsengine
+      Starting on 'node2' (worker): hdbdaemon, hdbwebdispatcher, hdbxsengine
+      Starting on 'node2' (worker): hdbdaemon, hdbwebdispatcher
+    All server processes started on host 'node2' (worker).
+  Importing delivery units...
+  Importing delivery unit HCO_INA_SERVICE
+  Importing delivery unit HANA_DT_BASE
+  Importing delivery unit HANA_IDE_CORE
+  Importing delivery unit HANA_TA_CONFIG
+  Importing delivery unit HANA_UI_INTEGRATION_SVC
+  Importing delivery unit HANA_UI_INTEGRATION_CONTENT
+  Importing delivery unit HANA_XS_BASE
+  Importing delivery unit HANA_XS_DBUTILS
+  Importing delivery unit HANA_XS_EDITOR
+  Importing delivery unit HANA_XS_IDE
+  Importing delivery unit HANA_XS_LM
+  Importing delivery unit HDC_ADMIN
+  Importing delivery unit HDC_BACKUP
+  Importing delivery unit HDC_IDE_CORE
+  Importing delivery unit HDC_SEC_CP
+  Importing delivery unit HDC_SYS_ADMIN
+  Importing delivery unit HDC_XS_BASE
+  Importing delivery unit HDC_XS_LM
+  Importing delivery unit SAPUI5_1
+  Importing delivery unit SAP_WATT
+  Importing delivery unit HANA_SEC_CP
+  Importing delivery unit HANA_BACKUP
+  Importing delivery unit HANA_HDBLCM
+  Importing delivery unit HANA_SEC_BASE
+  Importing delivery unit HANA_SYS_ADMIN
+  Importing delivery unit HANA_ADMIN
+  Importing delivery unit HANA_WKLD_ANLZ
+Installing Resident hdblcm...
+Updating SAP HANA Database Instance Integration on Local Host...
+  Regenerating SSL certificates...
+  Deploying SAP Host Agent configurations...
+Creating Component List...
+SAP HANA Database System installed
+
+Note: Deployment of SAP Host Agent configurations finished with errors
+
+You can send feedback to SAP with this form: https://node2:1129/lmsl/HDBLCM/SP1/feedback/feedback.html
+Log file written to '/var/tmp/hdb_SP1_hdblcm_install_2020-11-15_23.06.41/hdblcm.log' on host 'node2'.
