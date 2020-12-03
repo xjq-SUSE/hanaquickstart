@@ -48,16 +48,16 @@ SAP HANA on AWS 支持四种部署方式
 
 1. 将四块外挂硬盘格式化并挂载
 
-'''markdown
-#mkfs.xfs /dev/sdb1
-#mkfs.xfs /dev/sdc1
-#mkfs.xfs /dev/sdd1
-#mkfs.xfs /dev/sde1
-#mount /dev/sdb1 /hana/shared
-#mount /dev/sdb1 /hana/shared
-#mount /dev/sdb1 /hana/shared
-#mount /dev/sdb1 /hana/shared
-'''
+```
+# mkfs.xfs /dev/sdb1
+# mkfs.xfs /dev/sdc1
+# mkfs.xfs /dev/sdd1
+# mkfs.xfs /dev/sde1
+# mount /dev/sdb1 /hana/shared
+# mount /dev/sdb1 /hana/shared
+# mount /dev/sdb1 /hana/shared
+# mount /dev/sdb1 /hana/shared
+```
 
 2. 将HANA安装文件上传到指定目录，并给予执行权限
 
