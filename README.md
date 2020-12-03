@@ -61,8 +61,167 @@ SAP HANA on AWS 支持四种部署方式
 
 2. 将HANA安装文件上传到指定目录，并给予执行权限
 
-    #chmod +x /hana/shared*
+```
+# chmod +x /hana/shared*
+```
 
+3. 安装数据库，按照数据表填入参数
 
+```
+# ./hdblcm --ignore=check_signature_file
+# reboot
+```
 
+4. 修改sidadm用户权限
 
+```
+# sp1adm ALL=(ALL) NOPASSWD: /usr/sbin/crm_attribute -n hana_ha1_site_srHook_*
+```
+
+5. 验证数据库安装成功
+
+```
+# su sidadm
+# HDB info
+```
+
+### 配置HANA System Replication 
+
+HANA SR用于在主备节点间进行数据同步
+
+1. 将以下密钥从主用节点复制到备用节点相同位置
+
+```
+# /usr/sap/SP1/SYS/global/security/rsecssfs/data/SSFS_SP1.DAT
+# /usr/sap/SP1/SYS/global/security/rsecssfs/key/SSFS_SP1.KEY
+```
+
+2. 在主用节点上备份数据库
+
+```
+# hdbsql -u system -i 10 "BACKUP DATA USING FILE ('backup')"
+# hdbsql -u system -d systemdb -i 10 "BACKUP DATA USING FILE ('sysbackup')"
+```
+
+3. 在主用节点激活SR并查看状态
+
+```
+# hdbnsutil -sr_enable --name=AWS
+# hdbnsutil -sr_state 
+```
+
+4. 在备用节点激活SR并查看状态
+
+```
+# HDB stop
+# hdbnsutil -sr_register --name=SWA \
+ --remoteHost=node1 --remoteInstance=10 \
+ --replicationMode=sync --operationMode=logreplay
+# HDB start
+# hdbnsutil -sr_state
+```
+
+## 配置HA
+
+SUSE Linux Enterprise Server for SAP 自带 High Availability Extension高可用组件，可以帮助用户快速完成高可用集群搭建。这里使用AWS STONITH机制和Overlay-IP做为集群的浮动IP。
+
+### 系统配置
+
+1.将系统注册到SCC，以获取最新的更新和安全补丁，如果没有注册码可以在SUSE官网申请60天试用
+
+```
+# SUSEConnect -r your_reg_code
+```
+
+2. 创建aws-cli配置文件 /root/.aws/config
+
+```
+[default]
+region = region-name
+[profile cluster]
+region = region-name
+output = text
+```
+
+### 初始化HA集群
+
+1. 在主节点上生成密钥并拷贝至备用节点
+
+```
+# corosync-keygen
+# ls -l /etc/corosync/authkey
+```
+
+2. 创建配置文件 /etc/corosync/corosync.conf
+
+```
+# Read the corosync.conf.5 manual page
+totem {
+ version: 2
+ rrp_mode: passive
+ token: 5000
+ consensus: 7500
+ token_retransmits_before_loss_const: 6
+ secauth: on
+ crypto_hash: sha1
+ crypto_cipher: aes256
+ clear_node_high_bit: yes
+ interface {
+ ringnumber: 0
+ bindnetaddr: ip-local-node
+ mcastport: 5405
+ ttl: 1
+ }
+ transport: udpu
+}
+logging {
+ fileline: off
+ to_logfile: yes
+ to_syslog: yes
+ logfile: /var/log/cluster/corosync.log
+ debug: off
+ timestamp: on
+ logger_subsys {
+ subsys: QUORUM
+ debug: off
+ }
+}
+nodelist {
+ node {
+ ring0_addr: ip-node-1-a ring1_addr: ip-node-1-b # redundant ring
+ nodeid: 1
+ }
+ node {
+ ring0_addr: ip-node-2-a
+ ring1_addr: ip-node-2-b # redundant ring
+ nodeid: 2
+ }
+}
+quorum {
+# Enable and configure quorum subsystem (default: off)
+# see also corosync.conf.5 and votequorum.5
+ provider: corosync_votequorum
+ expected_votes: 2
+ two_node: 1
+}
+```
+
+3. 在两个节点上启动集群
+
+```
+# systemctl start pacemaker
+# systemctl enable pacemaker
+# crm_mon -r
+```
+
+4. 通过配置文件创建集群资源
+
+```
+# crm configure load update crm-hana.txt
+# crm status
+```
+
+# 参考文档
+
+https://docs.aws.amazon.com/quickstart/latest/sap-hana/  
+https://documentation.suse.com/sbp/all/html/SLES4SAP-hana-sr-guide-PerfOpt-12_AWS/index.html  
