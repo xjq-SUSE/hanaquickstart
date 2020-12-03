@@ -11,8 +11,9 @@ SAP HANA on AWS 支持四种部署方式
 * 水平扩展模式（Scale-out）
 
 架构如下图所示：  
-在开始部署前需要确定好系统参数，如下图所示：  
 ![arch](https://github.com/xjq-SUSE/hanaquickstart/blob/main/pic/arch.png)
+在开始部署前需要确定好系统参数，如下图所示：  
+![table](https://github.com/xjq-SUSE/hanaquickstart/blob/main/pic/table.png)
 
 ## 部署AWS资源
 
@@ -28,6 +29,7 @@ SAP HANA on AWS 支持四种部署方式
 ### 部署AWS资源
 
 进入AWS CloudFormation控制台，导入模板susehana.template，该模板预置了HANA所需的资源，如下图所示：  
+![network](https://github.com/xjq-SUSE/hanaquickstart/blob/main/pic/network.png)
 
 创建stack。等待stack创建完成无报错。检查以下资源已被成功创建：
 * 两个实例
