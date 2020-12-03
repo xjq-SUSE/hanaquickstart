@@ -223,5 +223,5 @@ quorum {
 
 # 参考文档
 
-https://docs.aws.amazon.com/quickstart/latest/sap-hana/  
-https://documentation.suse.com/sbp/all/html/SLES4SAP-hana-sr-guide-PerfOpt-12_AWS/index.html  
+[SAP HANA on the AWS Cloud: Quick Start Reference Deployment](https://docs.aws.amazon.com/quickstart/latest/sap-hana/)  
+[SAP HANA High Availability Cluster for the AWS Cloud - Setup Guide (v12)](https://documentation.suse.com/sbp/all/html/SLES4SAP-hana-sr-guide-PerfOpt-12_AWS/index.html)  
